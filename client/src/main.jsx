@@ -1,30 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import App from "./App";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import { theme } from "./utils/theme.js";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ProductDetails from "./screens/productDetails/productDetails.jsx";
-import Home from "./screens/home/Home.jsx";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import cartReducer from "./redux/cartSlice";
 
-const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <Home />,
-		errorElement: <div>Error</div>,
+export const store = configureStore({
+	reducer: {
+		cart: cartReducer,
 	},
-	{
-		path: "products/:productId",
-		element: <ProductDetails />,
-	},
-]);
+});
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<RouterProvider router={router} />
-		</ThemeProvider>
+		<BrowserRouter>
+			<Provider store={store}>
+				<ThemeProvider theme={theme}>
+					<CssBaseline />
+					<App />
+				</ThemeProvider>
+			</Provider>
+		</BrowserRouter>
 	</React.StrictMode>
 );
